@@ -1,26 +1,77 @@
 @import "tailwindcss";
 
+/* Airbnb's DLS in miniature: one warm red used sparingly for the single
+   most important action on a screen, a four-step neutral ramp doing all the
+   structural work, generous radii, and elevation instead of borders. */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #222222;
+  --brand: #ff385c;
+  --brand-pressed: #e00b41;
+  --ink: #222222;
+  --muted: #717171;
+  --line: #dddddd;
+  --surface: #f7f7f7;
+  --card: #ffffff;
+  --pin: #ffffff;
+  --pin-ink: #222222;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #121214;
+    --foreground: #f2f2f3;
+    --brand: #ff5a76;
+    --brand-pressed: #ff385c;
+    --ink: #f2f2f3;
+    --muted: #a3a3ab;
+    --line: #38383f;
+    --surface: #1c1c20;
+    --card: #1a1a1e;
+    --pin: #26262c;
+    --pin-ink: #f2f2f3;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-brand-pressed: var(--brand-pressed);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Airbnb leans on elevation rather than outlines to separate surfaces. */
+  --shadow-card: 0 6px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lift: 0 10px 28px rgba(0, 0, 0, 0.16);
+  --shadow-pill: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Was hardcoded to Arial, which silently overrode the Geist face the app
+     loads in layout.tsx. */
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Keyboard focus stays visible everywhere, in brand red so it reads as
+   part of the system rather than a browser default. */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

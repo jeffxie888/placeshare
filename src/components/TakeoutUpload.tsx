@@ -39,10 +39,10 @@ export default function TakeoutUpload({ listId }: { listId: string }) {
 
   return (
     <div>
-      <label className="block text-sm font-medium">
+      <label className="block text-sm font-semibold text-ink">
         Import from Google Takeout
       </label>
-      <p className="mt-0.5 text-xs text-neutral-500">
+      <p className="mt-0.5 text-xs text-muted">
         Google Takeout → Maps (your places) → Saved Places.json, or any
         individual list file.
       </p>
@@ -52,10 +52,10 @@ export default function TakeoutUpload({ listId }: { listId: string }) {
         accept="application/json,.json"
         disabled={isPending}
         onChange={handleFile}
-        className="mt-2 text-sm"
+        className="mt-2 w-full text-xs text-muted file:mr-3 file:rounded-full file:border-0 file:bg-surface file:px-4 file:py-2 file:text-xs file:font-semibold file:text-ink"
       />
-      {isPending && <p className="mt-1 text-xs text-neutral-500">Importing…</p>}
-      {message && <p className="mt-1 text-xs text-neutral-500">{message}</p>}
+      {isPending && <p className="mt-1 text-xs text-muted">Importing…</p>}
+      {message && <p className="mt-1 text-xs text-muted">{message}</p>}
     </div>
   );
 }

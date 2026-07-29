@@ -29,23 +29,23 @@ export default function CommentThread({
   }
 
   return (
-    <div className="mt-2 flex flex-col gap-1.5">
+    <div className="mt-3 flex flex-col gap-2">
       {comments.map((c) => (
-        <p key={c.id} className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p key={c.id} className="rounded-xl bg-surface px-3 py-2 text-sm text-ink">
           {c.body}
         </p>
       ))}
-      <form onSubmit={submit} className="flex gap-2">
+      <form onSubmit={submit} className="flex items-center gap-1">
         <input
           value={body}
           onChange={(e) => setBody(e.target.value)}
           placeholder="Add a comment…"
-          className="flex-1 rounded-lg border border-neutral-300 px-2.5 py-1 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+          className="flex-1 rounded-full bg-transparent px-3.5 py-2 text-sm text-ink ring-1 ring-line transition placeholder:text-muted focus:ring-ink"
         />
         <button
           type="submit"
           disabled={isPending || !body.trim()}
-          className="text-sm font-medium text-neutral-500 disabled:opacity-50"
+          className="rounded-full px-3 py-2 text-sm font-semibold text-brand transition disabled:opacity-40"
         >
           Post
         </button>

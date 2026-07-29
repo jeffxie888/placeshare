@@ -36,6 +36,22 @@ export async function addPlace(listId: string, formData: FormData) {
   revalidatePath(`/lists/${listId}`);
 }
 
+// Takes a single id rather than the `placeIds` array the reaction/comment
+// actions take. A place merged across two compared lists has a row on each,
+// and those rows belong to different lists - deleting "the place" from a
+// comparison would silently delete it out of the other person's list too.
+// Deletion stays a per-list action, done from that list's own page.
+// Reactions and comments on the row go with it (on delete cascade).
+export async function deletePlace(placeId: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  await supabase.from("places").delete().eq("id", placeId);
+}
+
 export async function bulkAddPlaces(listId: string, places: ParsedPlace[]) {
   if (!places.length) return;
 

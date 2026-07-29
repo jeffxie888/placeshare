@@ -36,12 +36,15 @@ export default async function ComparePage({
   if (!listA || !listB) notFound();
 
   return (
-    <main className="mx-auto max-w-2xl px-6 py-10">
-      <Link href={`/lists/${a}`} className="text-sm text-neutral-500 hover:underline">
+    <main className="mx-auto max-w-6xl px-6 py-10">
+      <Link
+        href={`/lists/${a}`}
+        className="text-sm font-medium text-muted transition hover:text-ink"
+      >
         ← {listA.title}
       </Link>
-      <h1 className="text-2xl font-semibold">
-        {listA.title} vs {listB.title}
+      <h1 className="mt-1 text-3xl font-semibold tracking-tight text-ink">
+        {listA.title} <span className="text-muted">vs</span> {listB.title}
       </h1>
 
       <div className="mt-6">

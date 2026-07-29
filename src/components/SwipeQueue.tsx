@@ -1,16 +1,21 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { setReaction } from "@/lib/actions/reactions";
+import { inferCategory, CATEGORY_EMOJI } from "@/lib/placeCategory";
 import type { MergedPlace } from "@/lib/overlap";
 
 export default function SwipeQueue({
   places,
   currentUserId,
+  onCurrentChange,
 }: {
   places: MergedPlace[];
   currentUserId: string;
+  // Lets a surrounding view (ComparisonView) keep its map centered on the
+  // card being swiped.
+  onCurrentChange?: (placeId: string | null) => void;
 }) {
   const queue = useMemo(
     () => places.filter((p) => !p.reactions.some((r) => r.user_id === currentUserId)),
@@ -21,6 +26,11 @@ export default function SwipeQueue({
   const router = useRouter();
 
   const current = queue[index];
+  const currentId = current?.id ?? null;
+
+  useEffect(() => {
+    onCurrentChange?.(currentId);
+  }, [currentId, onCurrentChange]);
 
   function react(type: "want_to_go" | "not_interested") {
     if (!current) return;
@@ -33,48 +43,55 @@ export default function SwipeQueue({
 
   if (!current) {
     return (
-      <p className="text-sm text-neutral-500">
+      <p className="text-sm text-muted">
         You&apos;re all caught up — no new places to react to right now.
       </p>
     );
   }
 
   return (
-    <div className="mx-auto max-w-sm rounded-xl border border-neutral-200 p-6 text-center dark:border-neutral-800">
-      <p className="text-lg font-semibold">{current.name}</p>
+    <div className="mx-auto flex w-full max-w-sm flex-col items-center rounded-3xl bg-card p-8 text-center shadow-card ring-1 ring-line/70">
+      <span
+        aria-hidden
+        className="grid h-20 w-20 place-items-center rounded-2xl bg-surface text-4xl"
+      >
+        {CATEGORY_EMOJI[inferCategory(current)]}
+      </span>
+
+      <p className="mt-5 text-xl font-semibold text-ink">{current.name}</p>
       {current.address && (
-        <p className="mt-1 text-sm text-neutral-500">{current.address}</p>
+        <p className="mt-1 text-sm text-muted">{current.address}</p>
       )}
       {current.category && (
-        <p className="mt-1 text-xs uppercase tracking-wide text-neutral-400">
+        <p className="mt-2 text-[11px] font-medium uppercase tracking-wider text-muted">
           {current.category}
         </p>
       )}
-      {current.note && <p className="mt-2 text-sm">{current.note}</p>}
+      {current.note && <p className="mt-3 text-sm text-ink">{current.note}</p>}
       {current.inA && current.inB && (
-        <p className="mt-2 text-xs font-medium text-neutral-400">
+        <span className="mt-3 rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
           On both lists
-        </p>
+        </span>
       )}
 
-      <div className="mt-6 flex justify-center gap-3">
+      <div className="mt-7 flex w-full justify-center gap-3">
         <button
           onClick={() => react("not_interested")}
           disabled={isPending}
-          className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium disabled:opacity-50 dark:border-neutral-700"
+          className="flex-1 rounded-full px-4 py-3 text-sm font-semibold text-ink ring-1 ring-line transition hover:bg-surface disabled:opacity-50"
         >
-          🚫 Not interested
+          Not interested
         </button>
         <button
           onClick={() => react("want_to_go")}
           disabled={isPending}
-          className="rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
+          className="flex-1 rounded-full bg-brand px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-pressed disabled:opacity-50"
         >
-          ⭐ Want to go
+          ♥ Want to go
         </button>
       </div>
 
-      <p className="mt-4 text-xs text-neutral-400">
+      <p className="mt-5 text-xs text-muted">
         {index + 1} of {queue.length}
       </p>
     </div>

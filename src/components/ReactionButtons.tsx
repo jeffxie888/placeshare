@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import { setReaction, clearReaction } from "@/lib/actions/reactions";
 import type { ReactionType } from "@/lib/types";
 
-const OPTIONS: { type: ReactionType; label: string; emoji: string }[] = [
-  { type: "want_to_go", label: "Want to go", emoji: "⭐" },
-  { type: "been", label: "Been", emoji: "✅" },
-  { type: "not_interested", label: "Not interested", emoji: "🚫" },
+// "Want to go" is the save action, so it gets the heart and the one hit of
+// brand red on the card - the same weighting Airbnb gives its wishlist.
+const OPTIONS: { type: ReactionType; label: string; icon: string; brand?: boolean }[] = [
+  { type: "want_to_go", label: "Want to go", icon: "♥", brand: true },
+  { type: "been", label: "Been", icon: "✓" },
+  { type: "not_interested", label: "Not interested", icon: "✕" },
 ];
 
 export default function ReactionButtons({
@@ -36,22 +38,35 @@ export default function ReactionButtons({
   }
 
   return (
-    <div className="flex gap-1.5">
-      {OPTIONS.map((opt) => (
-        <button
-          key={opt.type}
-          disabled={isPending}
-          onClick={() => toggle(opt.type)}
-          className={`rounded-full border px-2.5 py-1 text-xs font-medium transition disabled:opacity-50 ${
-            myReaction === opt.type
-              ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
-              : "border-neutral-300 dark:border-neutral-700"
-          }`}
-          title={opt.label}
-        >
-          {opt.emoji} {opt.label}
-        </button>
-      ))}
+    <div className="flex flex-wrap gap-1.5">
+      {OPTIONS.map((opt) => {
+        const active = myReaction === opt.type;
+        return (
+          <button
+            key={opt.type}
+            disabled={isPending}
+            onClick={() => toggle(opt.type)}
+            aria-pressed={active}
+            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition disabled:opacity-50 ${
+              active
+                ? opt.brand
+                  ? "bg-brand text-white"
+                  : "bg-ink text-background"
+                : "text-ink ring-1 ring-line hover:bg-surface"
+            }`}
+          >
+            <span
+              className={
+                active || !opt.brand ? "" : "text-brand"
+              }
+              aria-hidden
+            >
+              {opt.icon}
+            </span>
+            {opt.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

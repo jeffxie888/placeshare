@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "smoke-test": "node --env-file=.env.local scripts/smoke-test.mjs"
+    "smoke-test": "node --env-file=.env.local scripts/smoke-test.mjs",
+    "seed-paris": "node --env-file=.env.local scripts/seed-paris.mjs",
+    "seed-london": "node --env-file=.env.local scripts/seed-london.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",

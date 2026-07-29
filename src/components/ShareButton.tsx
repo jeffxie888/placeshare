@@ -15,7 +15,7 @@ export default function ShareButton({ shareToken }: { shareToken: string }) {
   return (
     <button
       onClick={copy}
-      className="rounded-full border border-neutral-300 px-3 py-1.5 text-sm font-medium dark:border-neutral-700"
+      className="shrink-0 rounded-full px-4 py-2 text-sm font-semibold text-ink underline decoration-line underline-offset-4 transition hover:bg-surface hover:no-underline"
     >
       {copied ? "Link copied!" : "Share list"}
     </button>

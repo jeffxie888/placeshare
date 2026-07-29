@@ -1,34 +1,30 @@
 import { addPlace } from "@/lib/actions/places";
 
+// Airbnb stacks its form fields into one bordered group so a multi-field
+// form reads as a single object rather than a pile of separate inputs.
+const field =
+  "w-full bg-transparent px-4 py-3 text-sm text-ink outline-none placeholder:text-muted";
+
 export default function PlaceForm({ listId }: { listId: string }) {
   const addPlaceForList = addPlace.bind(null, listId);
 
   return (
-    <form action={addPlaceForList} className="grid grid-cols-2 gap-2">
-      <input
-        name="name"
-        required
-        placeholder="Place name"
-        className="col-span-2 rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-      />
-      <input
-        name="address"
-        placeholder="Address (optional, used to place it on the map)"
-        className="col-span-2 rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-      />
-      <input
-        name="category"
-        placeholder="Category (optional)"
-        className="rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-      />
-      <input
-        name="note"
-        placeholder="Note (optional)"
-        className="rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-      />
+    <form action={addPlaceForList} className="flex flex-col gap-3">
+      <div className="divide-y divide-line overflow-hidden rounded-2xl ring-1 ring-line focus-within:ring-2 focus-within:ring-ink">
+        <input name="name" required placeholder="Place name" className={field} />
+        <input
+          name="address"
+          placeholder="Address — used to put it on the map"
+          className={field}
+        />
+        <div className="grid divide-y divide-line sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+          <input name="category" placeholder="Category (optional)" className={field} />
+          <input name="note" placeholder="Note (optional)" className={field} />
+        </div>
+      </div>
       <button
         type="submit"
-        className="col-span-2 rounded-lg bg-neutral-900 px-3 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900"
+        className="rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-pressed"
       >
         Add place
       </button>
