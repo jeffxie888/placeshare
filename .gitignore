@@ -33,8 +33,15 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# personal Google Takeout export used to seed sample data - real location
+# history/addresses, never commit
+/Takeout
+
 # vercel
 .vercel
+
+# supabase CLI local metadata (project ref, org id, pooler url)
+/supabase/.temp
 
 # typescript
 *.tsbuildinfo
